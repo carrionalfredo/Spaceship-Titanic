@@ -199,7 +199,7 @@ C	auc
 So the C value that gives the high AUC is C=6.
 
 ```python
-LogisticRegression(max_iter=2000, C=C, class_weight='balanced')
+LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
 ```
 With this setup, the coeficients of the model are:
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_01.png)
@@ -207,7 +207,43 @@ With this setup, the coeficients of the model are:
 The ROC Curve for this model is:
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_02.png)
 
+### Decision Tree
 
+The next model type employed to train the model was decision tree. In this case, first the model was trained with default parameters.
+```pyhon
+DecisionTreeClassifier()
+```
+With this setup, the valdiation AUC is:
+```python
+0.7384450103453765
+```
+So, the max_depth and min_samples_leaf of the setup were tunned. The results are the following:
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_03.png)
+From this results, the max_depth = 7 and min_samples_leaf = 14 were selected ot the final decision tree model.
+```python
+DecisionTreeClassifier(max_depth=7, min_samples_leaf=14)
+````
+The ROC Curve for this model is:
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_04.png)
 
+With this setup, validation the AUC is:
+```python
+0.8688219534192796
+```
 
+### Random Forest
 
+With the base of the decision tree model, , the next model type employed to train the model was random forest classifier. In this case, model was trained with the max_depth parameter value from the decision tree final model, and the parameters min_samples_leaf and n_estimators were tunned, with the following results.
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_05.png)
+
+From this results, the min_samples_leaf = 3 and n_estimators = 30 were selected ot the final random forest model.
+```python
+RandomForestClassifier(n_estimators=30, max_depth=6, min_samples_leaf=3, random_state=1)
+````
+The ROC Curve for this model is:
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_06.png)
+
+With this setup, validation the AUC is:
+```python
+0.8806727147328772
+```
