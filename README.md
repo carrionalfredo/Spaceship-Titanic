@@ -1,8 +1,9 @@
 
-## Mahine Learning Zoomcamp 2022 - Mid Term Project
+
+## Machine Learning Zoomcamp 2022 - Mid Term Project
 ### Spaceship Titanic - Predict which passengers are transported to an alternate dimension
 
-This machine larning project was prepared for the Mid term Project for the [Machine Learning Zoomcamp 2022](https://github.com/alexeygrigorev/mlbookcamp-code/tree/master/course-zoomcamp) edition online course, prepared by [DataTalks.Club.com](https://datatalks.club/) and [Alexey Grigorev
+This machine learning project was prepared for the Mid term Project for the [Machine Learning Zoomcamp 2022](https://github.com/alexeygrigorev/mlbookcamp-code/tree/master/course-zoomcamp) edition online course, prepared by [DataTalks.Club.com](https://datatalks.club/) and [Alexey Grigorev
 ](https://github.com/alexeygrigorev)
 
 
@@ -17,13 +18,13 @@ The Spaceship Titanic was an interstellar passenger liner launched a month ago. 
 While rounding Alpha Centauri en route to its first destination—the torrid 55 Cancri E—the unwary Spaceship Titanic collided with a spacetime anomaly hidden within a dust cloud. Sadly, it met a similar fate as its namesake from 1000 years before. Though the ship stayed intact, almost half of the passengers were transported to an alternate dimension!
 
 ![](https://storage.googleapis.com/kaggle-media/competitions/Spaceship%20Titanic/joel-filipe-QwoNAhbmLLo-unsplash.jpg)
-> Fuente：[Links](https://www.kaggle.com/competitions/spaceship-titanic/overview)
+> Fuente：[Kaggle](https://www.kaggle.com/competitions/spaceship-titanic/overview)
 
 To help rescue crews and retrieve the lost passengers, you are challenged to predict which passengers were transported by the anomaly using records recovered from the spaceship’s damaged computer system.
 
 Help save them and change history!
 
-For this, is available a data set ('train.csv') with information of the passengers. This data set is available in this repo, and aslo can be downloaded from Kaggle ([Data](https://www.kaggle.com/competitions/spaceship-titanic/data?select=train.csv)).
+For this, is available a data set ('train.csv') with information of the passengers. This data set is available in this repo, and also can be downloaded from Kaggle ([Data](https://www.kaggle.com/competitions/spaceship-titanic/data?select=train.csv)).
 
 Since the objective is predict if a passenger is transported or not, the problem is considered as a classification problem.
 
@@ -106,8 +107,107 @@ top       True
 freq      4378
 Name: transported, dtype: object
 ```
-The values are almost equall distributed between True and False.
+The values are almost equal distributed between True and False.
+#### Feature importance analysis
+In order to analyze the importance of the variables, the following steps were made.
+
+For categorical variables, the mutual_info_score is calculated, and the result is:
+```python
+passengerid    0.693121
+name           0.675740
+cryosleep      0.107255
+deck           0.023157
+homeplanet     0.018931
+destination    0.006161
+side           0.005271
+vip            0.000303
+```
+And the quantity of unique values for categorical variables is:
+```python
+passengerid    8693
+homeplanet        4
+destination       4
+name           8474
+deck              9
+side              3
+```
+From the above results, the variables 'passengerid' and ''name' are descarted for the high number of differente values in the data set. So the categorical variables to be used in the training of the model will be:
+```python
+categorical_columns = ['homeplanet', 'destination', 'deck', 'side', 'cryosleep', 'vip', 'transported']
+```
+
+For the numerical variables, the result of correlation analysis is the following:
+```python
+age            -0.052951
+roomservice    -0.241124
+foodcourt       0.045583
+shoppingmall    0.009391
+spa            -0.218545
+vrdeck         -0.204874
+num            -0.043832
+```
+None numerical variable will be descarted this time.
+
+## Model Training
+For the training of the model, the data set was splitted in train, validation and test sets, with a 60/20/20 split. Then it was applied one hot encoding, and the resultant vector is:
+```python
+['age',
+ 'cryosleep',
+ 'deck=a',
+ 'deck=b',
+ 'deck=c',
+ 'deck=d',
+ 'deck=e',
+ 'deck=f',
+ 'deck=g',
+ 'deck=t',
+ 'deck=unk',
+ 'destination=55_cancri_e',
+ 'destination=pso_j318.5-22',
+ 'destination=trappist-1e',
+ 'destination=unk',
+ 'foodcourt',
+ 'homeplanet=earth',
+ 'homeplanet=europa',
+ 'homeplanet=mars',
+ 'homeplanet=unk',
+ 'num',
+ 'roomservice',
+ 'shoppingmall',
+ 'side=p',
+ 'side=s',
+ 'side=unk',
+ 'spa',
+ 'vip',
+ 'vrdeck']
+```
+### Logistic Regression
+ The first model type employed to train the model was simple logistic regression. In this case, the model was setup with max_iter=2000, class_weight='balanced and was tunned for 10 C values between 1  to 10. For this setup, the roc_auc_score between predicted values and validation values is:
+ ```Python
+C	auc
+6	0.883357
+4	0.883244
+9	0.883141
+1	0.883109
+3	0.883012
+10	0.882922
+7	0.882916
+8	0.882897
+5	0.882795
+2	0.882772
+```
+So the C value that gives the high AUC is C=6.
+
+```python
+LogisticRegression(max_iter=2000, C=C, class_weight='balanced')
+```
+With this setup, the coeficients of the model are:
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_01.png)
+
+The ROC Curve for this model is:
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_02.png)
 
 
 
-# Spaceship-Titanic
+
+
