@@ -223,6 +223,7 @@ So, the max_depth and min_samples_leaf of the setup were tunned. The results are
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_03.png)
 
+
 From this results, the max_depth = 7 and min_samples_leaf = 14 were selected ot the final decision tree model.
 ```python
 DecisionTreeClassifier(max_depth=7, min_samples_leaf=14)
