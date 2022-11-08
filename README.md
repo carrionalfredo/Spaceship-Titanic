@@ -247,3 +247,14 @@ With this setup, validation the AUC is:
 ```python
 0.8806727147328772
 ```
+## Model selection
+In order to select the best classifier model to predict if a passenger is transported or not, following shows a comparison table with validation adn test AUC scores for the models trained.
+```python
+            Simple Logistic Reg.	Decision Tree Classifier	Random Forest
+Validation	0.883357	            0.868822                	0.880673
+Test    	0.882395	            0.867139	                0.873317
+```
+The model with the highest AUC score, both in validation ans test, is Logistic Regression with this setup:
+```python
+LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
+```
