@@ -24,7 +24,7 @@ To help rescue crews and retrieve the lost passengers, you are challenged to pre
 
 Help save them and change history!
 
-For this, is available a data set ('train.csv') with information of the passengers. This data set is available in this repo, and also can be downloaded from Kaggle ([Data](https://www.kaggle.com/competitions/spaceship-titanic/data?select=train.csv)).
+For this, is available a data set [(train.csv)](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/train.csv) with information of the passengers. This data set is available in this repo, and also can be downloaded from Kaggle ([Data](https://www.kaggle.com/competitions/spaceship-titanic/data?select=train.csv)).
 
 Since the objective is predict if a passenger is transported or not, the problem is considered as a classification problem.
 
@@ -219,12 +219,16 @@ With this setup, the valdiation AUC is:
 ```
 So, the max_depth and min_samples_leaf of the setup were tunned. The results are the following:
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_03.png)
+
 From this results, the max_depth = 7 and min_samples_leaf = 14 were selected ot the final decision tree model.
 ```python
 DecisionTreeClassifier(max_depth=7, min_samples_leaf=14)
-````
-The ROC Curve for this model is:
+```
+The Decision Tree for this model is the following.
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_04.png)
+
+The ROC Curve for this model is:
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_05.png)
 
 With this setup, validation the AUC is:
 ```python
@@ -234,14 +238,14 @@ With this setup, validation the AUC is:
 ### Random Forest
 
 With the base of the decision tree model, , the next model type employed to train the model was random forest classifier. In this case, model was trained with the max_depth parameter value from the decision tree final model, and the parameters min_samples_leaf and n_estimators were tunned, with the following results.
-![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_05.png)
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_06.png)
 
 From this results, the min_samples_leaf = 3 and n_estimators = 30 were selected ot the final random forest model.
 ```python
 RandomForestClassifier(n_estimators=30, max_depth=6, min_samples_leaf=3, random_state=1)
 ````
 The ROC Curve for this model is:
-![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_06.png)
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_07.png)
 
 With this setup, validation the AUC is:
 ```python
@@ -254,7 +258,7 @@ In order to select the best classifier model to predict if a passenger is transp
 Validation	0.883357	            0.868822                	0.880673
 Test    	0.882395	            0.867139	                0.873317
 ```
-The model with the highest AUC score, both in validation ans test, is Logistic Regression with this setup:
+The model with the highest AUC score, both in validation and test, is Logistic Regression with this setup:
 ```python
 LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
 ```
