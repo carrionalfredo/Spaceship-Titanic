@@ -24,7 +24,7 @@ To help rescue crews and retrieve the lost passengers, you are challenged to pre
 
 Help save them and change history!
 
-For this, is available a data set [(train.csv)](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/train.csv) with information of the passengers. This data set is available in this repo, and also can be downloaded from Kaggle ([Data](https://www.kaggle.com/competitions/spaceship-titanic/data?select=train.csv)).
+For this, is available a data set ([train.csv](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/train.csv)) with information of the passengers. This data set is available in this repo, and also can be downloaded from Kaggle ([Data](https://www.kaggle.com/competitions/spaceship-titanic/data?select=train.csv)).
 
 Since the objective is predict if a passenger is transported or not, the problem is considered as a classification problem.
 
@@ -50,7 +50,7 @@ VRDeck          float64
 Name             object
 Transported        bool
 ```
-The 'cabin' feature has the number where the passenger is staying, in the format 'deck'/'number'/'side', so will be splitted into the 3 new deck', 'num' and 'side' variables, and 'cabin' will be dropped from the data set.
+The `cabin` feature has the number where the passenger is staying, in the format `deck/number/side`, so will be splitted into the 3 new `deck`, `num` and `side` variables, and `cabin` will be dropped from the data set.
 
 This is the results after verify null and missed values.
 
@@ -79,11 +79,11 @@ dtypes: bool(3), float64(7), object(6)
 ```
 Is posible to see that about 2% of the data is null or missing, so the next step was group variables by type and replace null and missing values.
 
-For the 'object' type variables, the replacement was with 'unk' value.
+For the `object` type variables, the replacement was with `unk` value.
 
-For the numerical variables, except 'age', the replacement was with '0'.
+For the numerical variables, except `age`, the replacement was with `0`.
 
-For the 'age' variable, the replacement was with the median value.
+For the `age` variable, the replacement was with the `df['age'].median()` value.
 
 After this replacements, the data set remain as follow:
 
@@ -99,7 +99,7 @@ min	    1.000000	0.000000	    0.000000	    0.000000	    0.000000	    0.000000	  
 max	    79.000000	14327.000000	29813.000000	23492.000000	22408.000000	24133.000000	1894.000000
 ```
 #### Target variable
-The target variable for this project will be the  'transported' feature. This variable is boolen type with tehe following description.
+The target variable for this project will be the `transported` feature. This variable is `boolean` type with the following description.
 ```python
 count     8693
 unique       2
@@ -108,6 +108,7 @@ freq      4378
 Name: transported, dtype: object
 ```
 The values are almost equal distributed between True and False.
+
 #### Feature importance analysis
 In order to analyze the importance of the variables, the following steps were made.
 
@@ -131,7 +132,7 @@ name           8474
 deck              9
 side              3
 ```
-From the above results, the variables 'passengerid' and ''name' are descarted for the high number of differente values in the data set. So the categorical variables to be used in the training of the model will be:
+From the above results, the variables `passengerid` and `name` are descarted for the high number of different values in the data set. So the categorical variables to be used in the training of the model will be:
 ```python
 categorical_columns = ['homeplanet', 'destination', 'deck', 'side', 'cryosleep', 'vip', 'transported']
 ```
@@ -182,7 +183,7 @@ For the training of the model, the data set was splitted in train, validation an
  'vrdeck']
 ```
 ### Logistic Regression
- The first model type employed to train the model was simple logistic regression. In this case, the model was setup with max_iter=2000, class_weight='balanced and was tunned for 10 C values between 1  to 10. For this setup, the roc_auc_score between predicted values and validation values is:
+ The first model type employed to train the model was simple logistic regression. In this case, the model was setup with `max_iter=2000`, `class_weight='balanced'` and was tunned for 10 Inverse of regularization strength `C` values between `1` to `10`. For this setup, the `roc_auc_score` between predicted values and validation values is:
  ```Python
 C	auc
 6	0.883357
@@ -196,12 +197,14 @@ C	auc
 5	0.882795
 2	0.882772
 ```
-So the C value that gives the high AUC is C=6.
+So, the `C` value that gives the high `AUC` is `C=6`.
+
+Then, the final Logistic Regression model (`lgr`) is:
 
 ```python
-LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
+lgr = LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
 ```
-With this setup, the coeficients of the model are:
+With this setup, after fit the model with `x_train`  and `y_train`, the coeficients of the model are:
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_01.png)
 
@@ -211,24 +214,23 @@ The ROC Curve for this model is:
 
 ### Decision Tree
 
-The next model type employed to train the model was decision tree. In this case, first the model was trained with default parameters.
+The next model type employed to train the model was classifier decision tree. In this case, first the model was trained with default parameters.
 ```pyhon
 DecisionTreeClassifier()
 ```
-With this setup, the valdiation AUC is:
+With this setup, the valdiation `roc_auc_score` is:
 ```python
 0.7384450103453765
 ```
-So, the max_depth and min_samples_leaf of the setup were tunned. The results are the following:
+Next, the `max_depth` and `min_samples_leaf` of the setup were tunned. The results are the following:
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_03.png)
 
-
-From this results, the max_depth = 7 and min_samples_leaf = 14 were selected ot the final decision tree model.
+From this results, the `max_depth = 7` and `min_samples_leaf = 14` were selected ot the final decision tree model (`dt`).
 ```python
-DecisionTreeClassifier(max_depth=7, min_samples_leaf=14)
+dt = DecisionTreeClassifier(max_depth=7, min_samples_leaf=16)
 ```
-The Decision Tree for this model is the following.
+The Decision Tree for this model is the following. The decision tree render for this model is available [here](https://raw.githubusercontent.com/carrionalfredo/Spaceship-Titanic/main/dtree_render).
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_04.png)
 
@@ -236,37 +238,41 @@ The ROC Curve for this model is:
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_05.png)
 
-With this setup, validation the AUC is:
+With this setup, the validation `roc_auc_score` is:
 ```python
 0.8688219534192796
 ```
 
 ### Random Forest
 
-With the base of the decision tree model, , the next model type employed to train the model was random forest classifier. In this case, model was trained with the max_depth parameter value from the decision tree final model, and the parameters min_samples_leaf and n_estimators were tunned, with the following results.
+With the base of the decision tree model, the next model type employed to train the model was random forest classifier. In this case, model was trained with the `max_depth` parameter value from the decision tree final model, and the parameters `min_samples_leaf` and `n_estimators` were tunned, with the following results.
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_06.png)
 
-From this results, the min_samples_leaf = 3 and n_estimators = 30 were selected ot the final random forest model.
+From this results, the `min_samples_leaf = 3` and `n_estimators = 30` were selected for the final random forest model (`rf`).
+
 ```python
-RandomForestClassifier(n_estimators=30, max_depth=6, min_samples_leaf=3, random_state=1)
-````
+rf = RandomForestClassifier(n_estimators=30, max_depth=6, min_samples_leaf=3, random_state=1)
+```
+
 The ROC Curve for this model is:
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_07.png)
 
-With this setup, validation the AUC is:
+With this setup, the validation `roc_auc_score` is:
 ```python
 0.8806727147328772
 ```
 ## Model selection
-In order to select the best classifier model to predict if a passenger is transported or not, following shows a comparison table with validation adn test AUC scores for the models trained.
+In order to select the best classifier model to predict if a passenger is transported or not, next table shows a comparison of the validation and test `roc_auc_score` for the models trainned.
 ```python
             Simple Logistic Reg.	Decision Tree Classifier	Random Forest
 Validation	0.883357	            0.868822                	0.880673
 Test    	0.882395	            0.867139	                0.873317
 ```
-The model with the highest AUC score, both in validation and test, is Logistic Regression with this setup:
+The model with the highest 'roc_auc_score`, both for validation and test, is Logistic Regression with this setup:
 ```python
 LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
 ```
+
+## Dependency and Environment Managenent
