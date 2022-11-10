@@ -9,7 +9,7 @@ This machine learning project was prepared for the Mid term Project for the [Mac
 
 
 ## Problem description
-This problem and the data used are part of the Kaggle GettingStarted Prediction Competition.
+This problem and the data used are part of the **Kaggle GettingStarted Prediction Competition**.
 
 Welcome to the year 2912, where your data science skills are needed to solve a cosmic mystery. We've received a transmission from four lightyears away and things aren't looking good.
 
@@ -399,7 +399,7 @@ For deploy the web service in the cloud, the `mtp-env` environment was created w
 
         eb create mtp-env
 
-With the application addres provided by AWS, another test script was created (`cloud_test.py`).
+With the application addres provided by AWS, another test script was created ([`cloud_test.py`](https://raw.githubusercontent.com/carrionalfredo/Spaceship-Titanic/main/cloud_test.py)).
 
 Running the `cloud_test.py` script in a command window, will return the prediction using the `mtp_env` environment and `mtp_predictor` created in the AWS cloud.
 
