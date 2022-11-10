@@ -3,7 +3,7 @@
 ## Machine Learning Zoomcamp 2022 - Mid Term Project
 ### Spaceship Titanic - Predict which passengers are transported to an alternate dimension
 
-This machine learning project was prepared for the Mid term Project for the [Machine Learning Zoomcamp 2022](https://github.com/alexeygrigorev/mlbookcamp-code/tree/master/course-zoomcamp) edition online course, prepared by [DataTalks.Club.com](https://datatalks.club/) and [Alexey Grigorev
+This machine learning project was prepared for the Mid Term Project for the [Machine Learning Zoomcamp 2022](https://github.com/alexeygrigorev/mlbookcamp-code/tree/master/course-zoomcamp) edition online course, prepared by [DataTalks.Club.com](https://datatalks.club/) and [Alexey Grigorev
 ](https://github.com/alexeygrigorev)
 
 
@@ -18,21 +18,21 @@ The Spaceship Titanic was an interstellar passenger liner launched a month ago. 
 While rounding Alpha Centauri en route to its first destination—the torrid 55 Cancri E—the unwary Spaceship Titanic collided with a spacetime anomaly hidden within a dust cloud. Sadly, it met a similar fate as its namesake from 1000 years before. Though the ship stayed intact, almost half of the passengers were transported to an alternate dimension!
 
 ![](https://storage.googleapis.com/kaggle-media/competitions/Spaceship%20Titanic/joel-filipe-QwoNAhbmLLo-unsplash.jpg)
-> Fuente：[Kaggle](https://www.kaggle.com/competitions/spaceship-titanic/overview)
+> Source：[Kaggle](https://www.kaggle.com/competitions/spaceship-titanic/overview)
 
 To help rescue crews and retrieve the lost passengers, you are challenged to predict which passengers were transported by the anomaly using records recovered from the spaceship’s damaged computer system.
 
 Help save them and change history!
 
-For this, is available a data set ([train.csv](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/train.csv)) with information of the passengers. This data set is available in this repo, and also can be downloaded from Kaggle ([Data](https://www.kaggle.com/competitions/spaceship-titanic/data?select=train.csv)).
+A dataset is available for this purpose ([train.csv](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/train.csv)) with information of the passengers. This dataset is available in this repo, and also can be downloaded from Kaggle ([Data](https://www.kaggle.com/competitions/spaceship-titanic/data?select=train.csv)).
 
-Since the objective is predict if a passenger is transported or not, the problem is considered as a classification problem.
+Since the objective is to predict if a passenger is transported or not, the problem is considered as a classification problem.
 
 ## Training of the model
 ### Python libraries
-For the training of the model in this project, the pandas, numpy, matplolib and seabron were used.
+For the training of the model in this project, the **pandas**, **numpy**, **matplolib** and **seaborn** libraries were used.
 ### EDA
-The data set consist of 8693 rows of 14 columns of data.
+The dataset consist of 8693 rows of 14 columns of data.
 
 ```python
 PassengerId      object
@@ -50,7 +50,7 @@ VRDeck          float64
 Name             object
 Transported        bool
 ```
-The `cabin` feature has the number where the passenger is staying, in the format `deck/number/side`, so will be splitted into the 3 new `deck`, `num` and `side` variables, and `cabin` will be dropped from the data set.
+The `cabin` feature has the number where the passenger is staying, in the format `deck/number/side`, so will be splitted into the 3 new `deck`, `num` and `side` variables, and `cabin` will be dropped from the dataset.
 
 This is the results after verify null and missed values.
 
@@ -85,7 +85,7 @@ For the numerical variables, except `age`, the replacement was with `0`.
 
 For the `age` variable, the replacement was with the `df['age'].median()` value.
 
-After this replacements, the data set remain as follow:
+After this replacements, the dataset remain as follow:
 
 ```python
         age	        roomservice	    foodcourt	    shoppingmall	spa	            vrdeck	        num
@@ -107,12 +107,13 @@ top       True
 freq      4378
 Name: transported, dtype: object
 ```
-The values are almost equal distributed between True and False.
+The values are almost equal distributed between True and False (50.36% `True`).
 
 #### Feature importance analysis
 In order to analyze the importance of the variables, the following steps were made.
 
-For categorical variables, the mutual_info_score is calculated, and the result is:
+For categorical variables, the `mutual_info_score` is calculated, and the results are:
+
 ```python
 passengerid    0.693121
 name           0.675740
@@ -123,7 +124,8 @@ destination    0.006161
 side           0.005271
 vip            0.000303
 ```
-And the quantity of unique values for categorical variables is:
+The quantity of unique values for categorical variables is:
+
 ```python
 passengerid    8693
 homeplanet        4
@@ -132,12 +134,14 @@ name           8474
 deck              9
 side              3
 ```
-From the above results, the variables `passengerid` and `name` are descarted for the high number of different values in the data set. So the categorical variables to be used in the training of the model will be:
+From the above results, the variables `passengerid` and `name` are descarded for the high number of different values in the dataset. So the categorical variables to be used in the training of the model will be:
+
 ```python
 categorical_columns = ['homeplanet', 'destination', 'deck', 'side', 'cryosleep', 'vip', 'transported']
 ```
 
 For the numerical variables, the result of correlation analysis is the following:
+
 ```python
 age            -0.052951
 roomservice    -0.241124
@@ -147,10 +151,12 @@ spa            -0.218545
 vrdeck         -0.204874
 num            -0.043832
 ```
-None numerical variable will be descarted this time.
+None numerical variable will be descarded this time.
 
 ## Model Training
-For the training of the model, the data set was splitted in train, validation and test sets, with a 60/20/20 split. Then it was applied one hot encoding, and the resultant vector is:
+
+For the training of the model, the dataset was split in to train, validation and test sets, with a 60/20/20 split. Then it was applied one hot encoding, and the resultant vector is:
+
 ```python
 ['age',
  'cryosleep',
@@ -183,7 +189,8 @@ For the training of the model, the data set was splitted in train, validation an
  'vrdeck']
 ```
 ### Logistic Regression
- The first model type employed to train the model was simple logistic regression. In this case, the model was setup with `max_iter=2000`, `class_weight='balanced'` and was tunned for 10 Inverse of regularization strength `C` values between `1` to `10`. For this setup, the `roc_auc_score` between predicted values and validation values is:
+The first model type employed to train the model was a simple **logistic regression**. In this case, the model was set up with `max_iter=2000`, `class_weight='balanced'` and was tuned for 10 Inverse of regularization strength `C` values between `1` to `10`. For this setup, the `roc_auc_score` between predicted values and validation values is:
+
  ```Python
 C	auc
 6	0.883357
@@ -204,7 +211,7 @@ Then, the final Logistic Regression model (`lgr`) is:
 ```python
 lgr = LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
 ```
-With this setup, after fit the model with `x_train`  and `y_train`, the coeficients of the model are:
+With this setup, after fit the model with `x_train`  and `y_train`, the coefficients of the model are:
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_01.png)
 
@@ -214,19 +221,21 @@ The ROC Curve for this model is:
 
 ### Decision Tree
 
-The next model type employed to train the model was classifier decision tree. In this case, first the model was trained with default parameters.
+The next model type employed to train the model was a **classifier decision tree**. In this case, first the model was trained with default parameters.
+
 ```pyhon
 DecisionTreeClassifier()
 ```
 With this setup, the valdiation `roc_auc_score` is:
 ```python
-0.7384450103453765
+0.7340163934426229
 ```
-Next, the `max_depth` and `min_samples_leaf` of the setup were tunned. The results are the following:
+Next, the `max_depth` and `min_samples_leaf` of the setup were tuned. The results are the following:
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_03.png)
 
-From this results, the `max_depth = 7` and `min_samples_leaf = 14` were selected ot the final decision tree model (`dt`).
+From this result, the `max_depth = 7` and `min_samples_leaf = 14` were selected for the final decision tree model (`dt`).
+
 ```python
 dt = DecisionTreeClassifier(max_depth=7, min_samples_leaf=16)
 ```
@@ -240,12 +249,12 @@ The ROC Curve for this model is:
 
 With this setup, the validation `roc_auc_score` is:
 ```python
-0.8688219534192796
+0.8692589792561939
 ```
 
 ### Random Forest
 
-With the base of the decision tree model, the next model type employed to train the model was random forest classifier. In this case, model was trained with the `max_depth` parameter value from the decision tree final model, and the parameters `min_samples_leaf` and `n_estimators` were tunned, with the following results.
+With the base of the decision tree model, the next model type employed to train the model was a random forest classifier. In this case, the model was trained with the `max_depth` parameter value from the decision tree final model, and the parameters `min_samples_leaf` and `n_estimators` were tuned, with the following results.
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_06.png)
 
@@ -260,6 +269,7 @@ The ROC Curve for this model is:
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_07.png)
 
 With this setup, the validation `roc_auc_score` is:
+
 ```python
 0.8806727147328772
 ```
@@ -267,8 +277,8 @@ With this setup, the validation `roc_auc_score` is:
 In order to select the best classifier model to predict if a passenger is transported or not, next table shows a comparison of the validation and test `roc_auc_score` for the models trainned.
 ```python
             Simple Logistic Reg.	Decision Tree Classifier	Random Forest
-Validation	0.883357	            0.868822                	0.880673
-Test    	0.882395	            0.867139	                0.873317
+Validation	0.883357	                0.869259	                0.880673
+Test    	0.882395	                0.867580	                0.873317
 ```
 The model with the highest 'roc_auc_score`, both for validation and test, is Logistic Regression with this setup:
 ```python
@@ -279,17 +289,18 @@ LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
 
 The selected model and its training logic has been exported to the `train.py` script, that generates the `LGRmodel.bin` pickle file.
 
-The file `predict.py` loads the `LGRmodel.bin` and deploy it vía web service with **Flask**.
+The file `predict.py` loads the `LGRmodel.bin` and deploy it via web service with **Flask**.
 
 All the dependencies and the virtual environment used in this project are provided in the [`pipfile`](https://raw.githubusercontent.com/carrionalfredo/Spaceship-Titanic/main/Pipfile) uploaded in this repository.
 
-In order to install this dependencies and virtual environment, with `Pipenv` instaled and once downloaded the  `pipfile` and `pipfile.lock` files in the working directory, execute the next command:
+In order to install this dependencies and virtual environment, with `Pipenv` installed and once downloaded the  `pipfile` and `pipfile.lock` files in the working directory, execute the next command:
 
         pipenv install
 
- This will install the dependencies from the `pipfile.lock` file. To activate the virtual environment for this project, run:
+This will install the dependencies from the `pipfile.lock` file. To activate the virtual environment for this project, run:
 
         pipenv shell
+
 
 Also, its posible run a command inside this virtual environment with:
 
@@ -401,6 +412,6 @@ For deploy the web service in the cloud, the `mtp-env` environment was created w
 
 With the application addres provided by AWS, another test script was created ([`cloud_test.py`](https://raw.githubusercontent.com/carrionalfredo/Spaceship-Titanic/main/cloud_test.py)).
 
-Running the `cloud_test.py` script in a command window, will return the prediction using the `mtp_env` environment and `mtp_predictor` created in the AWS cloud.
+Running the `cloud_test.py` script in a command window, will return the prediction using the `mtp_env` environment and `mtp_predictor` application created in the AWS cloud.
 
 ![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_10.png)
