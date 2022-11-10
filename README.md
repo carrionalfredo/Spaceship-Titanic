@@ -276,3 +276,107 @@ LogisticRegression(max_iter=2000, C=6, class_weight='balanced')
 ```
 
 ## Dependency and Environment Managenent
+
+The selected model and its training logic has been exported to the `train.py` script, that generates the `LGRmodel.bin` pickle file.
+
+The file `predict.py` loads the `LGRmodel.bin` and deploy it vía web service with **Flask**.
+
+All the dependencies and the virtual environment used in this project are provided in the [`pipfile`](https://raw.githubusercontent.com/carrionalfredo/Spaceship-Titanic/main/Pipfile) uploaded in this repository.
+
+In order to install this dependencies and virtual environment, with `Pipenv` instaled and once downloaded the  `pipfile` and `pipfile.lock` files in the working directory, execute the next command:
+
+        pipenv install
+
+ This will install the dependencies from the `pipfile.lock` file. To activate the virtual environment for this project, run:
+
+        pipenv shell
+
+Also, its posible run a command inside this virtual environment with:
+
+        pipenv run
+
+Once activated the virtual environment, the model can be deployed via web service running the following command:
+
+        predict.py
+
+This will serve the Flask app `transport_predictor` in the port `9696`.
+
+To verify that the `transport_predictor` is working, use the [`test.py`](https://raw.githubusercontent.com/carrionalfredo/Spaceship-Titanic/main/test.py) script. In another command window, go to the working directory, and run:
+
+        test.py
+
+If all is working OK, in the virtual environment command window, should return a `"POST /classify HTTP/1.1" 200 -` message, and in the another command window, should show the results of the prediction.
+
+For this example, the `test.py` script uses the following passenger data in **JSON()** format:
+
+```python
+data = {
+        "age": 37,
+    "cryosleep": 0,
+    "deck_a": 0,
+    "deck_b": 0,
+    "deck_c": 0,
+    "deck_d": 0,
+    "deck_e": 0,
+    "deck_f": 1,
+    "deck_g": 0,
+    "deck_t": 0,
+    "deck_unk": 0,
+    "destination_55_cancri_e": 0,
+    "destination_pso_j318_5_22": 0,
+    "destination_trappist_1e": 1,
+    "destination_unk": 0,
+    "foodcourt": 27,
+    "homeplanet_earth": 1,
+    "homeplanet_europa": 0,
+    "homeplanet_mars": 0,
+    "homeplanet_unk": 0,
+    "num": 309,
+    "roomservice": 0,
+    "shoppingmall": 11,
+    "side_p": 0,
+    "side_s": 1,
+    "side_unk": 0,
+    "spa": 732,
+    "vip": 0,
+    "vrdeck": 5
+    }
+```
+The result of this test should be:
+
+        Transported?:  False
+
+## Containerization
+
+The model and dependencies were containerizated with **Docker**.
+
+To create a Docker image denominated `mtp` with the virtual environment and dependencies used in the model, start the Docker service, go to the working directory where the necesary `dockerfile` is, and run the following command:
+
+        docker build -t mtp .
+
+The [`dockerfile`](https://raw.githubusercontent.com/carrionalfredo/Spaceship-Titanic/main/Dockerfile) used to create the Docker image in this project, has been uploaded to his repository.
+
+To run the Docker image recently created, run this command:
+
+        docker run -it --rm --entrypoint=bash mtp
+
+ And for run the web service via **Gunicorn** of the `transport_predictor` app in the port `9696`, run the following command:
+
+        docker run -it --rm -p 9696:9696 mtp
+
+The following messages should be show:
+
+        [INFO] Starting gunicorn 20.1.0
+        [1] [INFO] Listening at: http://0.0.0.0:9696 (1)
+        [1] [INFO] Using worker: sync
+        [8] [INFO] Booting worker with pid: 8
+
+After that, to test the deployed model, in another command window, run the `test.py` script.
+
+The result `Transported?:  False` should be show as response.
+
+
+
+
+
+
