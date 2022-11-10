@@ -375,8 +375,32 @@ After that, to test the deployed model, in another command window, run the `test
 
 The result `Transported?:  False` should be show as response.
 
+## Cloud Deployment
 
+Adicionally, the model was deployed in the cloud through **AWS Elastic Beanstalk**. For this, first an application called `mtp_predictor` was created under the Docker platform, with the following command:
 
+        eb init -p docker -r us-east-1 mtp_predictor
 
+After create the application, con be tested locally executing:
 
+        eb local run --port 9696
 
+If the application in online, the following message will appear.
+
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_08.png)
+
+In another command window, the application can be tested, executing the `test.py` script:
+
+And the result should be:
+
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_09.png)
+
+For deploy the web service in the cloud, the `mtp-env` environment was created with:
+
+        eb create mtp-env
+
+With the application addres provided by AWS, another test script was created (`cloud_test.py`).
+
+Running the `cloud_test.py` script in a command window, will return the prediction using the `mtp_env` environment and `mtp_predictor` created in the AWS cloud.
+
+![](https://github.com/carrionalfredo/Spaceship-Titanic/blob/main/images/Fig_10.png)
