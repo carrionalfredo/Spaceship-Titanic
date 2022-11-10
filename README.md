@@ -377,7 +377,7 @@ To run the Docker image recently created, run this command:
 
 The following messages should be show:
 
-        [INFO] Starting gunicorn 20.1.0
+        [1] [INFO] Starting gunicorn 20.1.0
         [1] [INFO] Listening at: http://0.0.0.0:9696 (1)
         [1] [INFO] Using worker: sync
         [8] [INFO] Booting worker with pid: 8
